@@ -1,90 +1,140 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="com.erp.admin.db.mapper.SysRoleUserMapper" >
-  <resultMap id="BaseResultMap" type="com.erp.admin.db.entity.SysRoleUser" >
-    <id column="id" property="id" jdbcType="INTEGER" />
-    <result column="uid" property="uid" jdbcType="INTEGER" />
-    <result column="rid" property="rid" jdbcType="INTEGER" />
-  </resultMap>
-   <resultMap id="UserMap" type="com.erp.admin.db.entity.SysUser">
-       <id property="id" column="ID"/>
-       <result column="uid" property="uid" jdbcType="INTEGER" />
-       <result property="username" column="username"/>
-       <result property="password" column="password"/>
-       <collection property="roles" ofType="com.erp.admin.db.entity.SysRole">
-      	   <result column="rid" property="rid"/>
-           <result column="name" property="name"/>
-           <result column="realname" property="realname"/>
-       </collection>
-   </resultMap>
-   
-    <select id="findByUsername" parameterType="String" resultMap="UserMap">
-        select u.*
-        ,r.name,r.realname,r.rid
-        from sys_user u
-        LEFT JOIN sys_role_user sru on u.uid= sru.uid
-        LEFT JOIN sys_role r on sru.rid=r.rid
-        where username= #{username}
-    </select>
-    
-  <sql id="Base_Column_List" >
-    id, uid, rid
-  </sql>
-  <select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer" >
-    select 'true' as QUERYID,
-    <include refid="Base_Column_List" />
-    from sys_role_user
-    where id = #{id,jdbcType=INTEGER}
-  </select>
-  <delete id="deleteByPrimaryKey" parameterType="java.lang.Integer" >
-    delete from sys_role_user
-    where id = #{id,jdbcType=INTEGER}
-  </delete>
-  <insert id="insert" parameterType="com.erp.admin.db.entity.SysRoleUser" >
-    insert into sys_role_user (id, uid, rid)
-    values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER})
-  </insert>
-  <insert id="insertSelective" parameterType="com.erp.admin.db.entity.SysRoleUser" >
-    insert into sys_role_user
-    <trim prefix="(" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        id,
-      </if>
-      <if test="uid != null" >
-        uid,
-      </if>
-      <if test="rid != null" >
-        rid,
-      </if>
-    </trim>
-    <trim prefix="values (" suffix=")" suffixOverrides="," >
-      <if test="id != null" >
-        #{id,jdbcType=INTEGER},
-      </if>
-      <if test="uid != null" >
-        #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="rid != null" >
-        #{rid,jdbcType=INTEGER},
-      </if>
-    </trim>
-  </insert>
-  <update id="updateByPrimaryKeySelective" parameterType="com.erp.admin.db.entity.SysRoleUser" >
-    update sys_role_user
-    <set >
-      <if test="uid != null" >
-        uid = #{uid,jdbcType=INTEGER},
-      </if>
-      <if test="rid != null" >
-        rid = #{rid,jdbcType=INTEGER},
-      </if>
-    </set>
-    where id = #{id,jdbcType=INTEGER}
-  </update>
-  <update id="updateByPrimaryKey" parameterType="com.erp.admin.db.entity.SysRoleUser" >
-    update sys_role_user
-    set uid = #{uid,jdbcType=INTEGER},
-      rid = #{rid,jdbcType=INTEGER}
-    where id = #{id,jdbcType=INTEGER}
-  </update>
+<mapper namespace="com.erp.admin.db.mapper.SysRoleUserMapper">
+	<resultMap id="BaseResultMap" type="com.erp.admin.db.entity.SysRoleUser">
+		<id column="id" property="id" jdbcType="INTEGER" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result column="rid" property="rid" jdbcType="INTEGER" />
+		<result column="create_date" jdbcType="TIMESTAMP" property="createDate" />
+		<result column="create_by" jdbcType="INTEGER" property="createBy" />
+		<result column="last_update_date" jdbcType="TIMESTAMP" property="lastUpdateDate" />
+		<result column="last_update_by" jdbcType="INTEGER" property="lastUpdateBy" />
+	</resultMap>
+	<resultMap id="UserMap" type="com.erp.admin.db.entity.SysUser">
+		<id property="id" column="ID" />
+		<result column="uid" property="uid" jdbcType="INTEGER" />
+		<result property="username" column="username" />
+		<result property="password" column="password" />
+		<collection property="roles" ofType="com.erp.admin.db.entity.SysRole">
+			<result column="rid" property="rid" />
+			<result column="name" property="name" />
+			<result column="realname" property="realname" />
+		</collection>
+	</resultMap>
+
+	<select id="findByUsername" parameterType="String" resultMap="UserMap">
+		select u.*
+		,r.name,r.realname,r.rid
+		from sys_user u
+		LEFT JOIN sys_role_user sru on u.uid= sru.uid
+		LEFT JOIN sys_role r on sru.rid=r.rid
+		where username= #{username}
+	</select>
+
+	<sql id="Base_Column_List">
+		id, uid, rid, create_date, create_by, last_update_date,last_update_by
+	</sql>
+	<select id="selectByPrimaryKey" resultMap="BaseResultMap" parameterType="java.lang.Integer">
+		select 'true' as QUERYID,
+		<include refid="Base_Column_List" />
+		from sys_role_user
+		where id = #{id,jdbcType=INTEGER}
+	</select>
+	<delete id="deleteByPrimaryKey" parameterType="java.lang.Integer">
+		delete from sys_role_user
+		where id = #{id,jdbcType=INTEGER}
+	</delete>
+	<insert id="insert" parameterType="com.erp.admin.db.entity.SysRoleUser">
+		insert into sys_role_user (id, uid, rid, create_date,
+		create_by,
+		last_update_date, last_update_by
+		)
+		values (#{id,jdbcType=INTEGER}, #{uid,jdbcType=INTEGER}, #{rid,jdbcType=INTEGER}, #{createDate,jdbcType=TIMESTAMP},
+		#{createBy,jdbcType=INTEGER},
+		#{lastUpdateDate,jdbcType=TIMESTAMP}, #{lastUpdateBy,jdbcType=INTEGER})
+	</insert>
+	<insert id="insertSelective" parameterType="com.erp.admin.db.entity.SysRoleUser">
+		insert into sys_role_user
+		<trim prefix="(" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				id,
+			</if>
+			<if test="uid != null">
+				uid,
+			</if>
+			<if test="rid != null">
+				rid,
+			</if>
+			<if test="createDate != null">
+				create_date,
+			</if>
+			<if test="createBy != null">
+				create_by,
+			</if>
+			<if test="lastUpdateDate != null">
+				last_update_date,
+			</if>
+			<if test="lastUpdateBy != null">
+				last_update_by,
+			</if>
+		</trim>
+		<trim prefix="values (" suffix=")" suffixOverrides=",">
+			<if test="id != null">
+				#{id,jdbcType=INTEGER},
+			</if>
+			<if test="uid != null">
+				#{uid,jdbcType=INTEGER},
+			</if>
+			<if test="rid != null">
+				#{rid,jdbcType=INTEGER},
+			</if>
+			 <if test="createDate != null">
+                #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="lastUpdateDate != null">
+                #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateBy != null">
+                #{lastUpdateBy,jdbcType=INTEGER},
+            </if>
+		</trim>
+	</insert>
+	<update id="updateByPrimaryKeySelective" parameterType="com.erp.admin.db.entity.SysRoleUser">
+		update sys_role_user
+		<set>
+			<if test="uid != null">
+				uid = #{uid,jdbcType=INTEGER},
+			</if>
+			<if test="rid != null">
+				rid = #{rid,jdbcType=INTEGER},
+			</if>
+			 <if test="createDate != null">
+                create_date = #{createDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="createBy != null">
+                create_by = #{createBy,jdbcType=INTEGER},
+            </if>
+            <if test="lastUpdateDate != null">
+                last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+            </if>
+            <if test="lastUpdateBy != null">
+                last_update_by = #{lastUpdateBy,jdbcType=INTEGER},
+            </if>
+		</set>
+		where id = #{id,jdbcType=INTEGER}
+	</update>
+	<update id="updateByPrimaryKey" parameterType="com.erp.admin.db.entity.SysRoleUser">
+		update sys_role_user
+		set uid = #{uid,jdbcType=INTEGER},
+		rid =
+		#{rid,jdbcType=INTEGER},
+		  create_date = #{createDate,jdbcType=TIMESTAMP},
+        create_by = #{createBy,jdbcType=INTEGER},
+        last_update_date = #{lastUpdateDate,jdbcType=TIMESTAMP},
+        last_update_by = #{lastUpdateBy,jdbcType=INTEGER}
+		where id = #{id,jdbcType=INTEGER}
+	</update>
 </mapper>
