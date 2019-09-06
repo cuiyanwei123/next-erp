@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration>
+	<!-- spring boot admin -->
+	<include resource="org/springframework/boot/logging/logback/base.xml"/>
+	<jmxConfigurator/>
+	<!-- %m输出的信息,%p日志级别,%t线程名,%d日期,%c类的全名,,,, -->
+	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<charset>UTF-8</charset>
+			<pattern>%d %p (%file:%line\)- %m%n</pattern>
+		</encoder>
+	</appender>
+	<appender name="FILE"
+		class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<File>logs/info.log</File>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<!-- daily rollover -->
+			<fileNamePattern>logs/info.%d{yyyy-MM-dd}.log</fileNamePattern>
+			<!-- keep 30 days' worth of history -->
+			<maxHistory>30</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{HH:mm:ss.SSS} %p (%file:%line\)- %m%n</pattern>
+		</encoder>
+	</appender>
+	<!-- 可以使用spring来扩展profile的支持, 必须以 logback-spring.xml 命名 -->
+	<!-- spring.profiles.active=dev -->
+	<springProfile name="dev">
+		<root level="INFO">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE" />
+		</root>
+		<logger name="org.springframework.web" level="INFO" />
+		<logger name="com.erp.admin.db.mapper" level="DEBUG" />
+	</springProfile>
+	<!-- spring.profiles.active=dev -->
+	<springProfile name="test">
+		<root level="INFO">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE" />
+		</root>
+		<logger name="org.springframework.web" level="INFO" />
+		<logger name="com.erp.admin.db.mapper" level="INFO" />
+	</springProfile>
+	<!-- spring.profiles.active=prod -->
+	<springProfile name="prod">
+		<root level="INFO">
+			<appender-ref ref="STDOUT" />
+			<appender-ref ref="FILE" />
+		</root>
+		<logger name="org.springframework.web" level="INFO" />
+		<logger name="com.erp.admin.db.mapper" level="DEBUG" />
+	</springProfile>
+
+</configuration>
