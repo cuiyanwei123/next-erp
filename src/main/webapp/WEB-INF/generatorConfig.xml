@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE generatorConfiguration PUBLIC "-//mybatis.org//DTD MyBatis Generator Configuration 1.0//EN" "http://mybatis.org/dtd/mybatis-generator-config_1_0.dtd" >
+<generatorConfiguration >
+ <classPathEntry location="D:\repository\mysql\mysql-connector-java\5.1.46\mysql-connector-java-5.1.46.jar" />
+  <context id="context1" >
+  	 <commentGenerator>  
+	    <!-- 是否去除自动生成的注释 true：是 ： false:否 --> 
+	    <property name="suppressAllComments" value="true" /> 
+	    <!--数据库连接的信息：驱动类、连接地址、用户名、密码 --> 
+ 	 </commentGenerator>  
+  
+    <jdbcConnection driverClass="com.mysql.jdbc.Driver" connectionURL="jdbc:mysql://farm4udev.mysql.rds.aliyuncs.com:3336/centaur?useUnicode=true&amp;characterEncoding=utf8" userId="cuiyanwei" password="Cuiyanwei@1" />
+    <javaModelGenerator targetPackage="com.erp.admin.db.entity" targetProject="netx-erp" />
+    <sqlMapGenerator targetPackage="com.erp.admin.db.sqlmap" targetProject="netx-erp" />
+    <javaClientGenerator targetPackage="com.erp.admin.db.mapper" targetProject="netx-erp" type="XMLMAPPER" />
+    
+    
+	<table  schema="" tableName="opportunity" domainObjectName="Opportunity"  
+    	enableSelectByPrimaryKey="true"
+    	enableInsert="true"
+    	enableUpdateByPrimaryKey="true"
+    	enableDeleteByPrimaryKey="true"
+    	selectByPrimaryKeyQueryId="true"
+	    enableCountByExample="false" 
+	    enableUpdateByExample="false" 
+	    enableDeleteByExample="false" 
+	    enableSelectByExample="false" 
+	    selectByExampleQueryId="false">
+	  <!--   <property name="useActualColumnNames" value="true"/> -->
+		<columnOverride column="jd_detail" javaType="java.lang.String" jdbcType="VARCHAR" /> 
+    </table>
+  </context>
+</generatorConfiguration>
