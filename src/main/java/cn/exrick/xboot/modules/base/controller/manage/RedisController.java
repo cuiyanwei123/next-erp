@@ -32,6 +32,7 @@ import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
+import springfox.documentation.annotations.ApiIgnore;
 
 /**
  * @author Exrickx
@@ -41,6 +42,7 @@ import redis.clients.jedis.JedisPool;
 @Api(description = "Redis缓存管理接口")
 @RequestMapping("/erp/redis")
 @Transactional
+@ApiIgnore()
 public class RedisController {
 
     @Autowired
