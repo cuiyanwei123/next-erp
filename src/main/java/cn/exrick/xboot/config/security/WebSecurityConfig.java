@@ -75,7 +75,7 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
                 // 表单登录方式
                 .formLogin().loginPage("/erp/common/needLogin")
                 // 登录请求url
-                .loginProcessingUrl("/erp/login").permitAll()
+                .loginProcessingUrl("/erp/common/swagger/login").permitAll()
                 // 成功处理类
                 .successHandler(successHandler)
                 // 失败
