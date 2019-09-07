@@ -37,7 +37,7 @@ public class SecurityController {
     @ApiOperation(value = "Swagger接口文档专用登录接口 方便测试")
     public Result<Object> swaggerLogin(@RequestParam String username, @RequestParam String password,
             @ApiParam("验证码") @RequestParam(required = false) String code,
-            @ApiParam("可自定义登录接口地址") @RequestParam(required = false, defaultValue = "http://127.0.0.1:8888/xboot/login") String loginUrl) {
+            @ApiParam("可自定义登录接口地址") @RequestParam(required = false, defaultValue = "http://127.0.0.1:8090/erp/login") String loginUrl) {
         Map<String, Object> params = new HashMap<>(16);
         params.put("username", username);
         params.put("password", password);

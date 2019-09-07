@@ -6,7 +6,7 @@ jasypt:
 server:
   port: 8090
   servlet:
-    context-path: /erp
+    context-path: /
   tomcat:
     uri-encoding: UTF-8
     max-threads: 1000
@@ -81,11 +81,11 @@ xboot:
 # 忽略鉴权url
 ignored:
   urls:
-    - /xboot/actuator/**
-    - /xboot/admin/**
-    - /xboot/dictData/getByType/**
-    - /xboot/user/regist
-    - /xboot/common/**
+    - /erp/actuator/**
+    - /erp/admin/**
+    - /erp/dictData/getByType/**
+    - /erp/user/regist
+    - /erp/common/**
     - /druid/**
     - /swagger-ui.html
     - /swagger-resources/**
@@ -95,7 +95,7 @@ ignored:
     - /**/*.css
     - /**/*.png
     - /**/*.ico
-    - /xboot/test/**
+    - /erp/test/**
 
 # Actuator
 management:

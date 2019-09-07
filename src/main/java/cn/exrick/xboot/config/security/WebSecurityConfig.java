@@ -73,9 +73,9 @@ public class WebSecurityConfig extends WebSecurityConfigurerAdapter {
         }
         registry.and()
                 // 表单登录方式
-                .formLogin().loginPage("/xboot/common/needLogin")
+                .formLogin().loginPage("/erp/common/needLogin")
                 // 登录请求url
-                .loginProcessingUrl("/xboot/login").permitAll()
+                .loginProcessingUrl("/erp/login").permitAll()
                 // 成功处理类
                 .successHandler(successHandler)
                 // 失败
