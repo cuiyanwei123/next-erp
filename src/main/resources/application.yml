@@ -6,7 +6,7 @@ jasypt:
 server:
   port: 8090
   servlet:
-    context-path: /
+    context-path: /erp
   tomcat:
     uri-encoding: UTF-8
     max-threads: 1000
