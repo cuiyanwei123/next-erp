@@ -45,7 +45,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @Api(description = "用户接口")
-@RequestMapping("/xboot/user")
+@RequestMapping("/erp/user")
 @CacheConfig(cacheNames = "user")
 @Transactional
 public class UserController {

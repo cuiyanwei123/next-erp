@@ -23,7 +23,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @Api(description = "Security相关接口")
-@RequestMapping("/xboot/common")
+@RequestMapping("/erp/common")
 @Transactional
 public class SecurityController {
 

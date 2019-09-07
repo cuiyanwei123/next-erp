@@ -34,7 +34,7 @@ import lombok.extern.slf4j.Slf4j;
 @Slf4j
 @RestController
 @Api(description = "角色管理接口")
-@RequestMapping("/xboot/role")
+@RequestMapping("/erp/role")
 @Transactional
 public class RoleController {
 

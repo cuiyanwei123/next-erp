@@ -1,5 +1,23 @@
 package cn.exrick.xboot.modules.base.controller.manage;
 
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageImpl;
+import org.springframework.data.redis.core.StringRedisTemplate;
+import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.RestController;
+
 import cn.exrick.xboot.common.utils.PageUtil;
 import cn.exrick.xboot.common.utils.ResultUtil;
 import cn.exrick.xboot.common.vo.PageVo;
@@ -12,17 +30,8 @@ import cn.hutool.core.util.StrUtil;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.PageImpl;
-import org.springframework.data.redis.core.StringRedisTemplate;
-import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.*;
 import redis.clients.jedis.Jedis;
 import redis.clients.jedis.JedisPool;
-
-import java.util.*;
-
 
 /**
  * @author Exrickx
@@ -30,7 +39,7 @@ import java.util.*;
 @Slf4j
 @RestController
 @Api(description = "Redis缓存管理接口")
-@RequestMapping("/xboot/redis")
+@RequestMapping("/erp/redis")
 @Transactional
 public class RedisController {
 
@@ -42,15 +51,12 @@ public class RedisController {
 
     @RequestMapping(value = "/getAllByPage", method = RequestMethod.GET)
     @ApiOperation(value = "分页获取全部")
-    public Result<Page<RedisVo>> getAllByPage(@RequestParam(required = false) String key,
-                                              @ModelAttribute SearchVo searchVo,
-                                              @ModelAttribute PageVo pageVo){
-
+    public Result<Page<RedisVo>> getAllByPage(@RequestParam(required = false) String key, @ModelAttribute SearchVo searchVo,
+            @ModelAttribute PageVo pageVo) {
         List<RedisVo> list = new ArrayList<>();
-
-        if(StrUtil.isNotBlank(key)){
+        if (StrUtil.isNotBlank(key)) {
             key = "*" + key + "*";
-        }else{
+        } else {
             key = "*";
         }
         for (String s : redisTemplate.keys(key)) {
@@ -58,14 +64,14 @@ public class RedisController {
             list.add(redisVo);
         }
         Page<RedisVo> page = new PageImpl<RedisVo>(PageUtil.listToPage(pageVo, list), PageUtil.initPage(pageVo), list.size());
-        page.getContent().forEach(e->{
+        page.getContent().forEach(e -> {
             String value = "";
             try {
-                value =  redisTemplate.opsForValue().get(e.getKey());
-                if(value.length()>150){
+                value = redisTemplate.opsForValue().get(e.getKey());
+                if (value.length() > 150) {
                     value = value.substring(0, 149) + "...";
                 }
-            } catch (Exception exception){
+            } catch (Exception exception) {
                 value = "非字符格式数据";
             }
             e.setValue(value);
@@ -75,57 +81,50 @@ public class RedisController {
 
     @RequestMapping(value = "/getByKey/{key}", method = RequestMethod.GET)
     @ApiOperation(value = "通过key获取")
-    public Result<Object> getByKey(@PathVariable String key){
-
+    public Result<Object> getByKey(@PathVariable String key) {
         String value = redisTemplate.opsForValue().get(key);
-        return new ResultUtil<Object>().setData(value);
+        return new ResultUtil<>().setData(value);
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     @ApiOperation(value = "添加或编辑")
-    public Result<Object> save(@RequestParam String key,
-                               @RequestParam String value){
-
-        redisTemplate.opsForValue().set(key ,value);
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+    public Result<Object> save(@RequestParam String key, @RequestParam String value) {
+        redisTemplate.opsForValue().set(key, value);
+        return new ResultUtil<>().setSuccessMsg("删除成功");
     }
 
     @RequestMapping(value = "/delByKeys", method = RequestMethod.DELETE)
     @ApiOperation(value = "批量删除")
-    public Result<Object> delByKeys(@RequestParam String[] keys){
-
-        for(String key : keys){
+    public Result<Object> delByKeys(@RequestParam String[] keys) {
+        for (String key : keys) {
             redisTemplate.delete(key);
         }
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return new ResultUtil<>().setSuccessMsg("删除成功");
     }
 
     @RequestMapping(value = "/delAll", method = RequestMethod.DELETE)
     @ApiOperation(value = "全部删除")
-    public Result<Object> delAll(){
-
+    public Result<Object> delAll() {
         redisTemplate.delete(redisTemplate.keys("*"));
-        return new ResultUtil<Object>().setSuccessMsg("删除成功");
+        return new ResultUtil<>().setSuccessMsg("删除成功");
     }
 
     @RequestMapping(value = "/getKeySize", method = RequestMethod.GET)
     @ApiOperation(value = "获取实时key大小")
-    public Result<Object> getKeySize(){
-
+    public Result<Object> getKeySize() {
         Map<String, Object> map = new HashMap<>(16);
         Jedis jedis = jedisPool.getResource();
         map.put("keySize", jedis.dbSize());
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        if(jedis!=null){
+        if (jedis != null) {
             jedis.close();
         }
-        return new ResultUtil<Object>().setData(map);
+        return new ResultUtil<>().setData(map);
     }
 
     @RequestMapping(value = "/getMemory", method = RequestMethod.GET)
     @ApiOperation(value = "获取实时内存大小")
-    public Result<Object> getMemory(){
-
+    public Result<Object> getMemory() {
         Map<String, Object> map = new HashMap<>(16);
         Jedis jedis = jedisPool.getResource();
         String[] strs = jedis.info().split("\n");
@@ -137,20 +136,19 @@ public class RedisController {
             }
         }
         map.put("time", DateUtil.format(new Date(), "HH:mm:ss"));
-        if(jedis!=null){
+        if (jedis != null) {
             jedis.close();
         }
-        return new ResultUtil<Object>().setData(map);
+        return new ResultUtil<>().setData(map);
     }
 
     @RequestMapping(value = "/info", method = RequestMethod.GET)
     @ApiOperation(value = "获取Redis信息")
-    public Result<Object> info(){
-
+    public Result<Object> info() {
         List<RedisInfo> infoList = new ArrayList<>();
         Map<String, Object> map = new HashMap<>(16);
         Jedis jedis = jedisPool.getResource();
-        String[] strs =jedis.info().split("\n");
+        String[] strs = jedis.info().split("\n");
         for (String str1 : strs) {
             RedisInfo redisInfo = new RedisInfo();
             String[] str = str1.split(":");
@@ -162,9 +160,9 @@ public class RedisController {
                 infoList.add(redisInfo);
             }
         }
-        if(jedis!=null){
+        if (jedis != null) {
             jedis.close();
         }
-        return new ResultUtil<Object>().setData(infoList);
+        return new ResultUtil<>().setData(infoList);
     }
 }

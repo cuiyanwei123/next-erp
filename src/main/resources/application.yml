@@ -53,9 +53,9 @@ spring:
   boot:
     admin:
       # 修改上下文路径
-      context-path: /xboot/admin
+      context-path: /erp/admin
       client:
-        url: http://127.0.0.1:${server.port}/xboot/admin
+        url: http://127.0.0.1:${server.port}/erp/admin
 
 xboot:
   # token交互方式
